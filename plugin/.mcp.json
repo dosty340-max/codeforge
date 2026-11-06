@@ -2,7 +2,7 @@
   "mcpServers": {
     "codeforge": {
       "type": "http",
-      "url": "http://localhost:3000/mcp"
+      "url": "https://codeforge-drab-three.vercel.app/mcp"
     }
   }
 }

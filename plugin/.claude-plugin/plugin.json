@@ -1,6 +1,6 @@
 {
   "name": "codeforge",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Describe what you want to build. A Brain plans it and coordinates specialist agents, with progress on your Codeforge dashboard.",
   "author": { "name": "Codeforge AI" },
   "license": "MIT",
