@@ -38,6 +38,10 @@ Nejde to z localhostu, protože server volají servery Claude. Po nasazení:
 
 Plugin tam neběží. Pravidla Brainu proto posílá přímo server (`src/lib/mcp/instructions.ts`) a nabízí prompt `build`. Jeden Claude postupně hraje všechny role a výsledky ukládá do `submit_result`. Pro plnou stavbu je lepší Claude Code: pracuje se soubory, spouští specialisty souběžně a reálné testy.
 
+## Nasazení na Vercel
+
+Commity musí mít autora `dosty340-max`, jinak je plán Hobby u soukromého repozitáře zablokuje (Deployment Blocked). Veřejné hodnoty jsou v `.env.production`, tajné klíče tam nepatří.
+
 ## Nástroje
 
 | Nástroj | Účel |

@@ -1,6 +1,14 @@
 # Jak otestovat celou aplikaci
 
-Dev server musí běžet na `http://localhost:3000` (`npm run dev`).
+Živá verze běží na https://codeforge-drab-three.vercel.app. Pro lokální test spusť `npm run dev` a použij `http://localhost:3000`.
+
+V Supabase musí být **Site URL** nastavená na adresu, kterou testuješ, jinak odkazy z e-mailů a schvalování přístupu povedou jinam.
+
+Přechod z lokální instalace pluginu na verzi z GitHubu:
+
+```bash
+claude plugin uninstall codeforge@codeforge && claude plugin marketplace remove codeforge
+```
 
 ## 1. Web bez přihlášení
 
