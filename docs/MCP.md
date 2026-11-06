@@ -18,7 +18,7 @@ curl https://yzltbwoyikafemvynwus.supabase.co/.well-known/oauth-authorization-se
 
 ## Připojení
 
-Plugin ve složce `plugin/` server přidá sám, adresu lze změnit proměnnou `CODEFORGE_URL`. Stránka Connect nabízí jeden příkaz, který plugin nainstaluje a otevře schválení přístupu. Přihlášení přes tlačítko a stránku Anthropicu nejde, protože [podmínky](https://code.claude.com/docs/en/legal-and-compliance.md) zakazují třetím stranám nabízet přihlášení přes Claude.ai.
+Plugin ve složce `plugin/` server přidá sám. Adresa je v `plugin/.mcp.json` zapsaná natvrdo, protože s proměnnou v adrese desktopová aplikace Claude hlásila, že sezení ukazuje na jiný server. Při nasazení ji změň a zvyš verzi pluginu. Stránka Connect nabízí jeden příkaz, který plugin nainstaluje a otevře schválení přístupu. Přihlášení přes tlačítko a stránku Anthropicu nejde, protože [podmínky](https://code.claude.com/docs/en/legal-and-compliance.md) zakazují třetím stranám nabízet přihlášení přes Claude.ai.
 
 Stav „Claude is connected“ zapisuje `/mcp` do `mcp_connections`, jen pro OAuth tokeny s `client_id`. Bez pluginu:
 

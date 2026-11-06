@@ -71,4 +71,5 @@
 - [ ] Vložit `supabase/templates/confirm-signup.html` do Authentication → Emails → Confirm sign up (jde až s vlastním SMTP)
 - [ ] Otestovat potvrzení účtu s adresou mimo tým
 - [ ] Přepnout Site URL v Supabase na produkční adresu
+- [ ] Změnit adresu serveru v `plugin/.mcp.json` a zvýšit verzi pluginu
 - [ ] Nasadit appku a ověřit konektor v Claude na webu (viz docs/MCP.md)
