@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
 import { ResendConfirmation } from "@/components/auth/resend-confirmation";
 import { LogoFull } from "@/components/logo";
+import { safePath } from "@/lib/site";
 import { createClient } from "@/lib/supabase/client";
 
 export default function LoginPage() {
@@ -19,9 +20,7 @@ function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const linkFailed = searchParams.get("error") === "auth";
-  const next = searchParams.get("next") ?? "";
-  // Only same-site paths, so a crafted link cannot send people to another website.
-  const destination = /^\/(?![/\\])/.test(next) ? next : "/home";
+  const destination = safePath(searchParams.get("next"));
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(
@@ -98,6 +97,8 @@ function LoginForm() {
         </form>
 
         <p className="text-center text-xs text-muted-foreground">
+          <Link href="/forgot-password" className="text-lime hover:underline">Forgot your password?</Link>
+          <br />
           Don&apos;t have an account?{" "}
           <Link href="/register" className="text-lime hover:underline">Sign up</Link>
         </p>

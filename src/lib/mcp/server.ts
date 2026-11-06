@@ -1,8 +1,10 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { z } from "zod";
-import { divisionIds } from "@/lib/agent-catalog";
+import { catalogAgents, divisionIds, getCatalogAgent } from "@/lib/agent-catalog";
+import { readAgentInstructions } from "@/lib/agent-instructions";
 import { afterFailure, budgetState } from "@/lib/mcp/guardrails";
+import { buildPrompt, serverInstructions } from "@/lib/mcp/instructions";
 import { projectKinds } from "@/lib/project-kinds";
 
 const projectId = z.string().uuid().describe("Project ID");
@@ -34,7 +36,19 @@ function agentGroup(role: string, division: string | undefined) {
 }
 
 export function createMcpServer(supabase: SupabaseClient, userId: string) {
-  const server = new McpServer({ name: "codeforge", version: "1.0.0" });
+  const server = new McpServer({ name: "codeforge", version: "1.0.0" }, { instructions: serverInstructions });
+
+  server.registerPrompt(
+    "build",
+    {
+      title: "Build with Codeforge",
+      description: "Plan and build a website, app, game, startup or other software, or continue a project by its ID.",
+      argsSchema: { request: z.string().describe("What to build, or a project ID to continue") },
+    },
+    ({ request }) => ({
+      messages: [{ role: "user", content: { type: "text", text: buildPrompt(request) } }],
+    })
+  );
 
   async function logEvent(project: string, agent: string, type: string, message: string) {
     must(await supabase.from("events").insert({ project_id: project, agent_name: agent, type, message }));
@@ -42,7 +56,8 @@ export function createMcpServer(supabase: SupabaseClient, userId: string) {
 
   server.registerTool(
     "list_projects",
-    { description: "List the user's Codeforge projects with their type, phase and team." },
+    { annotations: { readOnlyHint: true },
+      description: "List the user's Codeforge projects with their type, phase and team." },
     async () =>
       reply(
         must(
@@ -196,6 +211,7 @@ export function createMcpServer(supabase: SupabaseClient, userId: string) {
   server.registerTool(
     "read_memory",
     {
+      annotations: { readOnlyHint: true },
       description: "Read the latest version of shared project memory. Filter by category or key.",
       inputSchema: { project_id: projectId, category: memoryCategory.optional(), key: z.string().max(200).optional() },
     },
@@ -339,6 +355,70 @@ export function createMcpServer(supabase: SupabaseClient, userId: string) {
         stop: state.exceeded,
         ...(state.exceeded && { reason: "The budget is used up. Stop and ask the user." }),
       });
+    }
+  );
+
+  server.registerTool(
+    "get_project",
+    {
+      annotations: { readOnlyHint: true },
+      description: "Get a project's phase, team, tasks and budget. Use it to check real progress or to continue a project.",
+      inputSchema: { project_id: projectId },
+    },
+    async ({ project_id }) => {
+      const project = must(
+        await supabase
+          .from("projects")
+          .select(
+            "id, name, description, kind, divisions, phase, phase_progress, tasks(id, title, status, assigned_to, attempts, last_error), budget:budgets(tokens_used, tokens_limit, steps_used, steps_limit)"
+          )
+          .eq("id", project_id)
+          .maybeSingle()
+      );
+      return project ? reply(project) : refuse("Project not found.");
+    }
+  );
+
+  server.registerTool(
+    "list_agents",
+    {
+      annotations: { readOnlyHint: true },
+      description: "Search the specialist catalog. Filter by departments and an optional search word.",
+      inputSchema: {
+        divisions: z.array(z.enum(divisionIds as [string, ...string[]])).default([]),
+        query: z.string().max(100).optional(),
+      },
+    },
+    async ({ divisions, query }) => {
+      const word = query?.toLowerCase();
+      const matches = catalogAgents.filter(
+        (agent) =>
+          (divisions.length === 0 || divisions.includes(agent.division)) &&
+          (!word || `${agent.name} ${agent.description}`.toLowerCase().includes(word))
+      );
+      return reply({
+        total: matches.length,
+        agents: matches.slice(0, 100).map((agent) => ({
+          slug: agent.slug,
+          name: agent.name,
+          division: agent.division,
+          description: agent.description.slice(0, 200),
+        })),
+      });
+    }
+  );
+
+  server.registerTool(
+    "get_agent_instructions",
+    {
+      annotations: { readOnlyHint: true },
+      description: "Get the full role instructions for one specialist from the catalog.",
+      inputSchema: { slug: z.string().min(1).max(200) },
+    },
+    async ({ slug }) => {
+      const agent = getCatalogAgent(slug);
+      if (!agent) return refuse("No agent with this slug. Use list_agents to find one.");
+      return reply({ name: agent.name, division: agent.division, instructions: readAgentInstructions(agent) });
     }
   );
 

@@ -17,6 +17,11 @@
 - **Rozhodnutí:** Všechna ukázková data v `src/lib/mock-data.ts`
 - **Důvod:** Snazší pozdější nahrazení skutečnými daty z API/DB
 
+## 2026-11-06: Specialisté se načítají za běhu
+- **Rozhodnutí:** Plugin má jednoho obecného specialistu, který si roli načte z katalogu přes MCP
+- **Důvod:** Uživatel nemusí instalovat stovky agentů a verze instrukcí zůstává pod naší kontrolou
+- **Dopad:** Plugin je malý a nástroj `get_agent_instructions` čte jen agenty z katalogu
+
 ## 2026-11-06: OAuth přes Supabase OAuth Server
 - **Rozhodnutí:** MCP server používá OAuth 2.1 server od Supabase místo vlastní implementace
 - **Důvod:** Tokeny jsou běžné uživatelské JWT, takže platí RLS a server nepotřebuje servisní klíč

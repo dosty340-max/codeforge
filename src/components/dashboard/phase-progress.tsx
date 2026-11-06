@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import type { ProjectPhase } from "@/lib/mock-data";
+import type { ProjectPhase } from "@/lib/domain";
 
 const phases: { key: ProjectPhase; label: string }[] = [
   { key: "planning", label: "Planning" },

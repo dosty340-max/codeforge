@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import type { ActivityEvent, Agent, Project } from "@/lib/mock-data";
+import type { ActivityEvent, Agent, Project } from "@/lib/domain";
 
 const POSTGRES_INVALID_UUID = "22P02";
 
@@ -43,7 +43,11 @@ export type ProjectTask = {
   lastError: string | null;
 };
 
+export type MemoryEntry = { key: string; category: string; content: string; version: number };
+
 type ProjectRow = {
+  share_token: string | null;
+  memory_entries?: MemoryEntry[];
   id: string;
   name: string;
   description: string;
@@ -70,11 +74,29 @@ function toEvent(row: EventRow): ActivityEvent {
   };
 }
 
-export type ProjectWithTeam = Project & { kind: string; divisions: string[]; tasks: ProjectTask[] };
+export type ProjectWithTeam = Project & {
+  kind: string;
+  divisions: string[];
+  tasks: ProjectTask[];
+  shareToken: string | null;
+  memory: MemoryEntry[];
+};
+
+function latestMemory(entries: MemoryEntry[]) {
+  const latest = new Map<string, MemoryEntry>();
+  for (const entry of entries) {
+    const id = `${entry.category}/${entry.key}`;
+    const current = latest.get(id);
+    if (!current || entry.version > current.version) latest.set(id, entry);
+  }
+  return [...latest.values()];
+}
 
 function toProject(row: ProjectRow): ProjectWithTeam {
   return {
     id: row.id,
+    shareToken: row.share_token,
+    memory: latestMemory(row.memory_entries ?? []),
     kind: row.kind,
     divisions: row.divisions,
     tasks: (row.tasks ?? []).map((task) => ({
@@ -138,7 +160,7 @@ export async function getProject(id: string): Promise<ProjectWithTeam | null> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("projects")
-    .select("*, agents(*), events(*), tasks(*), budget:budgets(*)")
+    .select("*, agents(*), events(*), tasks(*), memory_entries(key, category, content, version), budget:budgets(*)")
     .eq("id", id)
     .order("created_at", { referencedTable: "events", ascending: false })
     .order("created_at", { referencedTable: "tasks" })
@@ -147,6 +169,13 @@ export async function getProject(id: string): Promise<ProjectWithTeam | null> {
   if (error?.code === POSTGRES_INVALID_UUID) return null;
   if (error) throw new Error(error.message);
   return data && toProject(data as unknown as ProjectRow);
+}
+
+export async function getLastClaudeConnection(): Promise<string | null> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("mcp_connections").select("last_seen_at").maybeSingle();
+  if (error) throw new Error(error.message);
+  return data?.last_seen_at ?? null;
 }
 
 export async function getRecentEvents(limit = 20): Promise<ActivityEvent[]> {

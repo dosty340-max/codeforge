@@ -1,5 +1,3 @@
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { CommandBlock } from "@/components/agents/command-block";
@@ -10,11 +8,7 @@ import {
   divisions,
   type CatalogAgent,
 } from "@/lib/agent-catalog";
-
-function readInstructions(agent: CatalogAgent) {
-  const file = readFileSync(join(process.cwd(), "vendor/agency-agents", agent.path), "utf8");
-  return file.replace(/^---[\s\S]*?\n---\r?\n/, "").trim();
-}
+import { readAgentInstructions } from "@/lib/agent-instructions";
 
 export function AgentDetail({ agent, basePath }: { agent: CatalogAgent; basePath: string }) {
   const division = divisions[agent.division];
@@ -60,7 +54,7 @@ export function AgentDetail({ agent, basePath }: { agent: CatalogAgent; basePath
           </a>
         </div>
         <pre className="max-h-[32rem] overflow-auto whitespace-pre-wrap rounded-xl border border-border bg-card p-5 font-mono text-xs leading-relaxed text-muted-foreground">
-          {readInstructions(agent)}
+          {readAgentInstructions(agent)}
         </pre>
       </section>
     </article>

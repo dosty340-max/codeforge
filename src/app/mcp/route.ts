@@ -1,6 +1,7 @@
 import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
 import { createClient } from "@supabase/supabase-js";
 import { createMcpServer } from "@/lib/mcp/server";
+import { isOAuthClientToken } from "@/lib/mcp/token";
 
 function unauthorized(request: Request) {
   const { origin } = new URL(request.url);
@@ -26,6 +27,14 @@ async function handle(request: Request) {
   });
   const { data: { user } } = await supabase.auth.getUser(token);
   if (!user) return unauthorized(request);
+
+  if (isOAuthClientToken(token)) {
+    const { error } = await supabase
+      .from("mcp_connections")
+      .upsert({ user_id: user.id, last_seen_at: new Date().toISOString() });
+    // The dashboard status must never block Claude's work.
+    if (error) console.error("Could not record MCP connection:", error.message);
+  }
 
   const transport = new WebStandardStreamableHTTPServerTransport({
     sessionIdGenerator: undefined,

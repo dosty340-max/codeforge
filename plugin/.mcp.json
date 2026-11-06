@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "codeforge": {
+      "type": "http",
+      "url": "${CODEFORGE_URL:-http://localhost:3000}/mcp"
+    }
+  }
+}

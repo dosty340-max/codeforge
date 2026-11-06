@@ -10,17 +10,18 @@
 ```
 src/
   app/                    # Next.js App Router
-    (dashboard)/          # Dashboard layout se sidebarem
-      dashboard/          # Dashboard stránky
-    login/, register/     # Auth stránky
+    (app)/home/           # Přihlášená aplikace
+    agents/               # Veřejný katalog agentů
+    share/[token]/        # Veřejné výsledky projektu
+    mcp/                  # MCP server
     page.tsx              # Landing page
-  components/
-    layout/               # Sidebar, Topbar
-    dashboard/            # Agent cards, activity log, phase progress
-    ui/                   # shadcn/ui komponenty
+  components/             # agents, dashboard, home, landing, layout, settings, ui
   lib/
-    mock-data.ts          # Všechna ukázková data na jednom místě
-    utils.ts              # Utility funkce
+    data.ts               # Čtení dat ze Supabase pro stránky
+    mcp/                  # Nástroje MCP serveru a pojistky
+    domain.ts             # Společné typy a plány
+plugin/                   # Plugin pro Claude Code (Brain a specialisté)
+supabase/migrations/      # Schéma databáze
 docs/                     # Dokumentace projektu
 vendor/agency-agents/     # Převzatí agenti (MIT), aktualizace viz docs/AGENCY_AGENTS.md
 video/                    # Scény pro After Effects a render do public/video
@@ -29,5 +30,4 @@ video/                    # Scény pro After Effects a render do public/video
 ## Pravidla
 - Dark theme (Higgsfield styl), accent barva: #c8ff00 (lime)
 - Žádné tajné klíče v kódu, jen .env.example
-- Mock data v src/lib/mock-data.ts — jediný soubor k nahrazení
 - TypeScript strict, Tailwind + shadcn/ui

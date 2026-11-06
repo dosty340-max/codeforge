@@ -1,7 +1,7 @@
 # Katalog agentů podle Agency Agents
 
 Zadání: přenést do Codeforge to, co ukazuje [reel od notvokzzy](https://www.instagram.com/p/DfZNVUDuAod/).
-Stav: **katalog je na webu a napojený na projekty.** Spouštění agentů přes Brain přijde s fází 5 a plugin s fází 6.
+Stav: **katalog je na webu a napojený na projekty i plugin.** Specialisté se načítají za běhu přes MCP, viz `docs/MCP.md`. Ověření na skutečném projektu popisuje `docs/TESTING.md`.
 
 ## Co už funguje
 
@@ -78,10 +78,8 @@ Skript má i režim `--dry-run` a varuje, když vybraných agentů je víc, než
 
 ## Co zbývá
 
-- **Fáze 5:** Brain a MCP server musí používat tým z `projects.divisions` a zapisovat agenty s `agents.division`.
-- **Skupiny agentů:** `agents.group` zná jen orchestration, development a testing. Detail projektu bude seskupovat podle oddělení, až budou běžet skuteční agenti.
-- **Fáze 6:** plugin nahradí ruční instalační příkaz.
-- **Instalační příkaz:** je ověřený jen čtením skriptu `install.sh`, spuštění staženého skriptu bylo v testu zablokované. Před spuštěním pro veřejnost ho musí někdo jednou projet.
+- **Skupiny agentů:** `agents.group` zná jen orchestration, development a testing. Dashboard zatím neseskupuje podle oddělení.
+- **Volitelný instalační příkaz:** je ověřený jen čtením skriptu `install.sh`, spuštění staženého skriptu bylo v testu zablokované.
 - **Limity plánů:** Free má 5 agentů na projekt, ale jedno oddělení jich může mít 66. Fáze 7 musí určit, co přesně se počítá.
 
 ## Pravidla převzetí

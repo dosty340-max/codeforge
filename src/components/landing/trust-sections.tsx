@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, Check, ChevronDown } from "lucide-react";
-import { plans } from "@/lib/mock-data";
+import { ClaudeComparison } from "@/components/agents/claude-comparison";
+import { plans } from "@/lib/domain";
 
 const guardrails = [
   { value: "2", title: "negotiation rounds", copy: "Agents get two rounds to agree. After that, the Brain decides." },
@@ -27,6 +28,10 @@ const faqs = [
   {
     q: "Do I pay Codeforge for AI usage?",
     a: "No. Agents run on your own Claude account, so we never charge for AI usage. Your Codeforge plan covers projects, agents, history and sharing.",
+  },
+  {
+    q: "Do I need Claude Code?",
+    a: "No, but it is the better choice for full builds. Claude Code works on your files, runs specialists side by side and runs real tests. Claude on the web or desktop needs no install and suits planning and smaller work, with results in the conversation.",
   },
   {
     q: "Where do I talk to the agents?",
@@ -82,6 +87,13 @@ export function GetStarted() {
             </li>
           ))}
         </ol>
+        <div className="reveal mx-auto mt-16 max-w-4xl">
+          <h3 className="text-center text-xl font-bold tracking-tight">Claude Code gets the most out of Codeforge</h3>
+          <p className="mx-auto mb-6 mt-2 max-w-xl text-center text-sm text-muted-foreground">
+            You can also connect Claude on the web or desktop with nothing to install.
+          </p>
+          <ClaudeComparison />
+        </div>
       </div>
     </section>
   );

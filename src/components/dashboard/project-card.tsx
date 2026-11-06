@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight } from "lucide-react";
-import type { Project, ProjectPhase } from "@/lib/mock-data";
+import type { Project, ProjectPhase } from "@/lib/domain";
 import { cn } from "@/lib/utils";
 
 const phaseColors: Record<ProjectPhase, string> = {

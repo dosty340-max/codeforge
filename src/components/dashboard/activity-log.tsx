@@ -9,7 +9,7 @@ import {
   MessageCircleQuestion,
   AlertTriangle,
 } from "lucide-react";
-import type { ActivityEvent } from "@/lib/mock-data";
+import type { ActivityEvent } from "@/lib/domain";
 import { cn } from "@/lib/utils";
 
 const typeConfig = {

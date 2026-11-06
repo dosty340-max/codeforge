@@ -5,9 +5,10 @@ import { updateProjectSchema } from "@/lib/schemas";
 async function getProject(supabase: Awaited<ReturnType<typeof createClient>>, userId: string, projectId: string) {
   const { data, error } = await supabase
     .from("projects")
-    .select("*, agents(*), budget:budgets(*), events(*, order:created_at.desc)")
+    .select("*, agents(*), budget:budgets(*), events(*)")
     .eq("id", projectId)
     .eq("user_id", userId)
+    .order("created_at", { referencedTable: "events", ascending: false })
     .single();
   return { data, error };
 }
@@ -32,9 +33,14 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
   const parsed = await withBody(request, updateProjectSchema);
   if ("error" in parsed) return parsed.error;
 
+  const { phaseProgress, ...fields } = parsed.data;
   const { data, error } = await supabase
     .from("projects")
-    .update({ ...parsed.data, updated_at: new Date().toISOString() })
+    .update({
+      ...fields,
+      ...(phaseProgress !== undefined && { phase_progress: phaseProgress }),
+      updated_at: new Date().toISOString(),
+    })
     .eq("id", id)
     .eq("user_id", user.id)
     .select()

@@ -39,8 +39,11 @@ export function ProjectTeam({ team }: { team: string[] }) {
               );
             })}
           </ul>
-          <p className="mb-2 mt-5 text-xs text-muted-foreground">Run this once to add this team to Claude Code:</p>
-          <CommandBlock command={teamInstallCommand(selected)} />
+          <details className="mt-4 text-xs text-muted-foreground">
+            <summary className="cursor-pointer">Use these agents without Codeforge</summary>
+            <p className="mb-2 mt-2">The plugin loads specialists automatically. To install this team directly in Claude Code, run:</p>
+            <CommandBlock command={teamInstallCommand(selected)} />
+          </details>
         </>
       )}
     </Card>

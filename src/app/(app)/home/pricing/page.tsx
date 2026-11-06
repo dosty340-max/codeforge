@@ -1,6 +1,5 @@
-import { plans } from "@/lib/mock-data";
+import { plans } from "@/lib/domain";
 import { Check } from "lucide-react";
-import Link from "next/link";
 
 export default function PricingPage() {
   return (
@@ -36,16 +35,9 @@ export default function PricingPage() {
                 </li>
               ))}
             </ul>
-            <Link
-              href="/register"
-              className={`mt-6 block w-full rounded-lg px-4 py-2.5 text-center text-sm font-semibold transition-colors ${
-                plan.id === "pro"
-                  ? "bg-lime text-lime-foreground hover:bg-lime/90"
-                  : "border border-border text-foreground hover:border-lime/30"
-              }`}
-            >
-              {plan.id === "free" ? "Current Plan" : "Upgrade to Pro"}
-            </Link>
+            <p className="mt-6 rounded-lg bg-secondary px-4 py-2.5 text-center text-sm font-semibold text-muted-foreground">
+              {plan.id === "free" ? "Current plan" : "Coming soon"}
+            </p>
           </div>
         ))}
       </div>

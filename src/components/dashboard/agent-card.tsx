@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Bot, Loader2, CheckCircle2, AlertCircle, Clock, Pause } from "lucide-react";
-import type { Agent, AgentStatus } from "@/lib/mock-data";
+import type { Agent, AgentStatus } from "@/lib/domain";
 import { cn } from "@/lib/utils";
 
 const statusConfig: Record<AgentStatus, { label: string; color: string; icon: typeof Bot }> = {

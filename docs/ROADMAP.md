@@ -39,20 +39,28 @@
 - [x] Navíc create_task a list_projects, bez nich Brain nemůže plánovat
 - [x] Pojistky na serveru a logování do events
 - [x] Souhlasná stránka a metadata pro OAuth
-- [ ] Zapnout OAuth Server v Supabase a ověřit přihlášení z Claude Code
+- [x] Zapnout OAuth Server v Supabase
+- [ ] Ověřit celé přihlášení z Claude Code (viz docs/TESTING.md)
 
 ## Fáze 6 — Plugin pro Claude Code
-- [ ] Definice mozku a subagentů
-- [ ] Pravidla orchestrace
+- [x] Definice mozku a subagentů
+- [x] Pravidla orchestrace
+- [ ] Ověřit na skutečném projektu (viz docs/TESTING.md)
+
+## Dokončení aplikace
+- [x] Veřejné sdílení výsledků
+- [x] Úprava profilu, změna a reset hesla
+- [x] Smazání projektu, zobrazení úkolů a sdílené paměti
+- [x] Odstranění starého dashboardu a ukázkových dat
 
 ## Katalog agentů (podle docs/AGENCY_AGENTS.md)
 - [x] Katalog oddělení a agentů na webu
 - [x] Výběr týmů při vytváření projektu, výchozí podle typu
 - [x] Úprava databáze: role, oddělení, typ projektu a vybrané týmy
 - [x] Zachovat licenci MIT a uvést zdroj
-- [ ] Brain rozděluje úkoly specialistům, dashboard ukazuje kontrolu kroků (fáze 5)
-- [ ] Instalace vybraných týmů přes plugin (fáze 6)
-- [ ] Ověřit instalační příkaz skutečným spuštěním
+- [x] Brain rozděluje úkoly specialistům, dashboard ukazuje kontrolu kroků
+- [x] Specialisté se načítají za běhu přes MCP, instalace není potřeba
+- [ ] Ověřit volitelný instalační příkaz skutečným spuštěním
 
 ## Fáze 7 — Paywall
 - [ ] Stripe předplatné (Free / Pro)
@@ -63,3 +71,4 @@
 - [ ] Vložit `supabase/templates/confirm-signup.html` do Authentication → Emails → Confirm sign up (jde až s vlastním SMTP)
 - [ ] Otestovat potvrzení účtu s adresou mimo tým
 - [ ] Přepnout Site URL v Supabase na produkční adresu
+- [ ] Nasadit appku a ověřit konektor v Claude na webu (viz docs/MCP.md)
