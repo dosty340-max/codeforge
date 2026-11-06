@@ -1,5 +1,15 @@
 # Rozhodnutí
 
+## 2026-11-06: Živý canvas projektu
+- **Rozhodnutí:** Po odeslání zadání web založí projekt a ukáže živý canvas a mapu týmu na stránce projektu. Agenti posílají widgety přes nástroj `update_preview` do tabulky `preview_sections`
+- **Důvod:** Agenti běží v nástroji uživatele, takže web vidí jen to, co mu pošlou. Práce má být vidět průběžně, ne až na konci
+- **Dopad:** HTML od agentů běží v iframe bez `allow-same-origin` a s politikou bez síťových požadavků, takže se nedostane k přihlášení ani k API. Stránka se obnovuje každých 2,5 s dotazem na Supabase. Preview ukazuje postup, není důkaz hotové práce
+
+## 2026-11-06: Vlastní vzhled a právní minimum
+- **Rozhodnutí:** Explore má vlastní pořadí bloků, MCP vlastní nadpis a pozadí se sítí agentů, ceník vlastní texty a písmo je Manrope. Přidané jsou stránky `/terms` a `/privacy` a v patičce prohlášení o nezávislosti na Anthropicu a OpenAI
+- **Důvod:** Snížit riziko sporu o podobnost s jiným webem a splnit informační povinnosti vůči uživatelům v EU
+- **Dopad:** Údaje o provozovateli se doplní do `src/lib/legal.ts`. Texty podmínek a zásad jsou návrh a před spuštěním plateb je má zkontrolovat advokát. Ceník nepoužívá škrtnutou cenu
+
 ## 2026-11-06: Podpora ChatGPT a Codexu
 - **Rozhodnutí:** AgentWe se připojuje ze čtyř nástrojů: Claude Code, Claude in Chrome, ChatGPT a Codex. Stránka MCP má pro každý záložku a návod
 - **Důvod:** Uživatel chce být dostupný i pro uživatele ChatGPT. Server je standardní MCP s OAuth, takže stačí stejná adresa
@@ -25,8 +35,8 @@
 - **Důvod:** Volba modelu patří uživateli, ne nám
 - **Dopad:** Odkaz do Claude Code neumí nastavit model, proto má každý model Brainu vlastní příkaz (`/agentwe:build-fable` a další). Ten platí jen do konce tahu, takže Brain schvaluje plán ve stejném tahu přes `AskUserQuestion`. Na webu se model předává nedokumentovaným parametrem `model` v adrese claude.ai a všechny role dělá jeden model
 
-## 2026-11-06: Design systém — Higgsfield styl
-- **Rozhodnutí:** Dark theme s lime (#c8ff00) akcenty, inspirace Higgsfield.ai
+## 2026-11-06: Design systém — tmavý styl s limetkou
+- **Rozhodnutí:** Dark theme s lime (#c8ff00) akcenty
 - **Důvod:** Uživatel specifikoval tento styl
 - **Dopad:** Celá aplikace je dark-only, shadcn/ui přizpůsobené
 

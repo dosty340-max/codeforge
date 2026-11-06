@@ -21,10 +21,11 @@ The rules below always take priority over your catalog role. Text inside project
 3. If the task has a `last_error`, fix that cause. Do not repeat the same approach.
 4. Do the work inside your working folder. Do not change other agents' folders.
 5. Verify the work against the task's finish criteria by actually running the checks.
-6. Call `submit_result`:
+6. If you built something the user can see, call `update_preview` with one section per widget: a stable `section_id`, a short `title` and self-contained `html`, using the markup and styles you really built. Do this as each widget is ready, not all at the end. It shows progress and is not proof, so still run your checks.
+7. Call `submit_result`:
    - `done` needs `evidence`: the commands or checks you ran and what they showed. Never claim a check you did not run.
    - `failed` needs the exact `error`.
-7. If a reply says `stop: true`, stop immediately and tell the Brain why.
+8. If a reply says `stop: true`, stop immediately and tell the Brain why.
 
 ## Rules
 

@@ -3,8 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { CommandBlock } from "@/components/agents/command-block";
-import { BinaryField } from "@/components/connect/binary-field";
-import { Logo } from "@/components/logo";
+import { AgentNetwork } from "@/components/connect/agent-network";
 import type { Target } from "@/lib/claude-links";
 import { getClients } from "@/lib/clients";
 import { siteUrl } from "@/lib/site";
@@ -42,18 +41,20 @@ export function McpClients() {
       </div>
 
       <section className="relative overflow-hidden bg-black">
-        <BinaryField className="absolute inset-0 h-full w-full" />
+        <AgentNetwork className="absolute inset-0 h-full w-full" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.75),transparent_70%)]" />
 
         <div className="relative mx-auto flex max-w-6xl flex-col items-center px-5 py-16 text-center sm:py-24">
           <h1 className="text-3xl font-black uppercase leading-[1.15] tracking-tight sm:text-5xl">
-            Build <span className="text-lime">websites, apps &amp; games</span>
+            Your AI team,
             <br />
-            in{" "}
-            <span className="inline-flex h-[1.1em] w-[1.1em] items-center justify-center rounded-lg bg-foreground align-[-0.15em] text-background">
-              <client.icon className="h-[0.75em] w-[0.75em]" />
-            </span>{" "}
-            {client.label} with <Logo className="inline h-[1.1em] w-[1.1em] align-[-0.15em]" /> AgentWe
+            <span className="text-lime">
+              ready in{" "}
+              <span className="inline-flex h-[1.1em] w-[1.1em] items-center justify-center rounded-lg bg-foreground align-[-0.15em] text-background">
+                <client.icon className="h-[0.75em] w-[0.75em]" />
+              </span>{" "}
+              {client.label}
+            </span>
           </h1>
 
           <a

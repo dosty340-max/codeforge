@@ -15,6 +15,7 @@ src/
     connect/              # Veřejná stránka MCP
     create/               # Creatoři a zadání projektu
     pricing/              # Ceník
+    terms/, privacy/      # Podmínky a ochrana soukromí
     share/[token]/        # Veřejné výsledky projektu
     mcp/                  # MCP server
     page.tsx              # Explore
@@ -31,6 +32,6 @@ video/                    # Scény pro After Effects a render do public/video
 ```
 
 ## Pravidla
-- Dark theme (Higgsfield styl), accent barva: #c8ff00 (lime)
+- Dark theme, accent barva: #c8ff00 (lime), písmo Manrope
 - Žádné tajné klíče v kódu, jen .env.example
 - TypeScript strict, Tailwind + shadcn/ui

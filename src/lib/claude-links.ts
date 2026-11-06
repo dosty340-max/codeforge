@@ -18,11 +18,13 @@ type Request = {
   idea: string;
   brain?: string;
   specialists?: string;
+  projectId?: string;
 };
 
-function describe({ noun, choices, idea }: Request, extra: string[] = []) {
+function describe({ noun, choices, idea, projectId }: Request, extra: string[] = []) {
   const details = [...choices, ...extra];
-  return `${noun}${details.length ? ` (${details.join(", ")})` : ""}: ${idea.trim()}`;
+  const project = projectId ? ` (Project ID: ${projectId})` : "";
+  return `${noun}${details.length ? ` (${details.join(", ")})` : ""}: ${idea.trim()}${project}`;
 }
 
 export function claudeCodePrompt(request: Request) {

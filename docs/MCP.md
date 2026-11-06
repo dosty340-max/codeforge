@@ -79,6 +79,10 @@ Návody pro uživatele jsou v `src/lib/clients.ts` a na stránce `/connect`.
 
 Server i Supabase nabízejí OAuth discovery, dynamickou registraci klientů a PKCE. Skutečné připojení z ChatGPT a Codexu je potřeba ověřit po nasazení.
 
+## Živý canvas
+
+Nástroj `update_preview` ukládá widget do tabulky `preview_sections` (migrace `00007`). Stejné `section_id` widget nahradí, prázdné `html` i `css` ho smaže, limit je 40 widgetů na projekt. Stránka projektu widgety přidává bez načtení celé stránky.
+
 ## Plugin
 
 - `plugin/skills/build/SKILL.md`: příkaz `/agentwe:build`, hlavní konverzace v něm funguje jako Brain na Opusu.

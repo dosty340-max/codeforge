@@ -29,19 +29,19 @@ export default function PricingPage() {
       <main className="mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-8">
         <section className="relative overflow-hidden rounded-2xl border border-lime/60 bg-black p-6 shadow-[inset_0_-40px_60px_-30px_rgba(200,255,0,0.45)] sm:p-8">
           <h1 className="text-2xl font-black uppercase leading-tight tracking-tight sm:text-4xl">
-            <span className="text-lime">Save {Math.round(YEARLY_DISCOUNT * 100)}% on Pro</span>
+            <span className="text-lime">Pay yearly, save {Math.round(YEARLY_DISCOUNT * 100)}%</span>
             <br />
-            When you pay yearly
+            On the Pro plan
           </h1>
           <p className="mt-3 text-sm text-foreground/80">
-            Your whole AI team for ${yearlyPrice(pro.price).perMonth.toFixed(2)} a month instead of ${pro.price}.
+            Pro costs ${pro.price} a month, or ${yearlyPrice(pro.price).perMonth.toFixed(2)} a month when you pay for a year.
           </p>
         </section>
 
         <PricingPlans />
 
         <p className="mt-10 text-center text-xs leading-relaxed text-muted-foreground">
-          Prices in US dollars. AI usage is separate and runs on your own Claude or ChatGPT plan.
+          Prices in US dollars. The final price, including any VAT, appears before you pay. AI usage is separate and runs on your own Claude or ChatGPT plan.
           <br />
           Pro payments open soon. Sign up free now and upgrade when they do.
         </p>

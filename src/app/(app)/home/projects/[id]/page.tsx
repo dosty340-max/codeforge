@@ -9,6 +9,7 @@ import { ProjectMemory } from "@/components/dashboard/project-memory";
 import { ProjectTasks } from "@/components/dashboard/project-tasks";
 import { ShareLink } from "@/components/dashboard/share-link";
 import { PhaseProgress } from "@/components/dashboard/phase-progress";
+import { LiveProject } from "@/components/live/live-project";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft } from "lucide-react";
@@ -56,6 +57,8 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           <ShareLink projectId={project.id} token={project.shareToken} />
         </Card>
       )}
+
+      <LiveProject projectId={project.id} name={project.name} kind={project.kind} />
 
       <PhaseProgress phase={project.phase} progress={project.phaseProgress} />
 

@@ -62,3 +62,10 @@ test("every target has a prompt and only Codex has no link", () => {
   assert.ok(targetLink("claude-chrome", request)?.startsWith("https://claude.ai/new"));
   assert.ok(targetLink("claude-code", request)?.startsWith("claude-cli://"));
 });
+
+test("a project started on the website is named in every prompt", () => {
+  const started = { ...request, projectId: "1234" };
+  for (const target of ["claude-code", "claude-chrome", "chatgpt", "codex"] as const) {
+    assert.ok(targetPrompt(target, started).includes("(Project ID: 1234)"));
+  }
+});

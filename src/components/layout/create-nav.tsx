@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Crown } from "lucide-react";
 import { creatorHref, creators } from "@/lib/creators";
 import { cn } from "@/lib/utils";
 
@@ -34,9 +33,8 @@ export function CreateNav({ active }: { active?: string | null }) {
         ))}
         <Divider />
         <Item href="/pricing" active={active === "pricing"}>
-          <Crown className="h-3.5 w-3.5" />
           Pricing
-          <span className="rounded bg-lime px-1.5 py-0.5 text-[10px] font-bold leading-none text-lime-foreground">30% OFF</span>
+          <span className="rounded bg-lime px-1.5 py-0.5 text-[10px] font-bold leading-none text-lime-foreground">Save 30% yearly</span>
         </Item>
       </ul>
     </nav>

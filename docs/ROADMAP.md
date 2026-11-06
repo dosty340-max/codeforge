@@ -64,6 +64,7 @@
 
 ## Fáze 7 — Paywall
 - [ ] Stripe předplatné (Free / Pro)
+- [ ] Konečná cena včetně DPH pro spotřebitele v EU, podmínky obnovy a zrušení, právo na odstoupení
 - [ ] Checkout, webhooky, kontrola plánu
 
 ## Před spuštěním

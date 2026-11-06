@@ -17,7 +17,7 @@ const toolGroups = [
   { icon: ClipboardList, title: "Tasks", copy: "Split work and hand in results with evidence.", tools: ["create_task", "get_task", "submit_result"] },
   { icon: Database, title: "Shared memory", copy: "Keep the spec and decisions in one versioned place.", tools: ["read_memory", "write_memory"] },
   { icon: Bot, title: "Agents", copy: `Pick from ${agentCount} specialists and load their role.`, tools: ["list_agents", "get_agent_instructions"] },
-  { icon: Radio, title: "Live status", copy: "Show phases, agents and budget on your dashboard.", tools: ["report_status"] },
+  { icon: Radio, title: "Live status", copy: "Show agents, budget and a live preview on your dashboard.", tools: ["report_status", "update_preview"] },
   { icon: UserCheck, title: "Ask you", copy: "Stop and ask when a decision is yours.", tools: ["ask_user"] },
 ];
 

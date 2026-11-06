@@ -2,7 +2,7 @@
 
 import { ArrowUpRight, Check, Copy } from "lucide-react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { CreatorTeam } from "@/components/home/creator-team";
 import {
@@ -17,6 +17,7 @@ import {
 import { getClients } from "@/lib/clients";
 import { siteUrl } from "@/lib/site";
 import { creatorHref, getCreator, type Creator } from "@/lib/creators";
+import { getProjectKind } from "@/lib/project-kinds";
 import { createClient } from "@/lib/supabase/client";
 import { useCurrentUser } from "@/lib/use-session";
 
@@ -26,10 +27,10 @@ const SPECIALISTS_KEY = "agentwe-specialist-model";
 const TARGET_KEY = "agentwe-target";
 const clients = getClients(`${siteUrl}/mcp`);
 const targetNotes: Record<Target, string> = {
-  "claude-code": "Your request opens ready to send, press Enter to start.",
+  "claude-code": "Your request opens ready to send. Press Enter there and watch it build here.",
   "claude-chrome": "Opens in Claude with your Brain model selected. One model does all the work.",
   chatgpt: "Opens in ChatGPT with your request. Choose the model in ChatGPT.",
-  codex: "Paste the command in your terminal. Choose the model with /model in Codex.",
+  codex: "We copy the command for you. Paste it in your terminal and choose the model with /model.",
 };
 const selectClass =
   "rounded-lg border border-border bg-secondary px-2.5 py-1.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-lime";
@@ -92,6 +93,9 @@ function Studio({ creator, initialIdea }: { creator: Creator; initialIdea: strin
   const [idea, setIdea] = useState(initialIdea);
   const [choices, setChoices] = useState<Record<string, string>>({});
   const [copied, setCopied] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [sendError, setSendError] = useState("");
+  const router = useRouter();
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const folder = useStored(FOLDER_KEY);
   const brain = knownModel(useStored(BRAIN_KEY), DEFAULT_BRAIN);
@@ -140,15 +144,46 @@ function Studio({ creator, initialIdea }: { creator: Creator; initialIdea: strin
     setTimeout(() => setCopied(false), 2000);
   }
 
-  function askForIdea(e: React.MouseEvent) {
-    if (hasIdea) return;
-    e.preventDefault();
-    inputRef.current?.focus();
-  }
+  async function send() {
+    if (!hasIdea) {
+      inputRef.current?.focus();
+      return;
+    }
+    setSending(true);
+    setSendError("");
+    // Open first: browsers block pop-ups that start after an awaited call.
+    const popup = target === "claude-chrome" || target === "chatgpt" ? window.open("about:blank", "_blank") : null;
+    const kind = getProjectKind(creator.id);
 
-  function open(e: React.MouseEvent) {
-    askForIdea(e);
-    if (hasIdea && user && target !== "claude-code") void navigator.clipboard.writeText(prompt).catch(() => {});
+    const response = await fetch("/api/projects", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: idea.trim().slice(0, 80),
+        description: idea.trim().slice(0, 2000),
+        kind: kind.id,
+        divisions: kind.divisions,
+      }),
+    }).catch(() => null);
+
+    if (!response?.ok) {
+      popup?.close();
+      setSendError("Your project could not be started. Try again.");
+      setSending(false);
+      return;
+    }
+
+    const { id } = await response.json();
+    const started = { ...request, projectId: id };
+    const startLink = targetLink(target, started, folder);
+    if (target !== "claude-code") void navigator.clipboard.writeText(targetPrompt(target, started, folder)).catch(() => {});
+    if (popup && startLink) {
+      popup.opener = null;
+      popup.location.href = startLink;
+    } else if (startLink) {
+      window.location.href = startLink;
+    }
+    router.push(`/home/projects/${id}`);
   }
 
   return (
@@ -256,32 +291,37 @@ function Studio({ creator, initialIdea }: { creator: Creator; initialIdea: strin
                       {copied ? <Check className="h-4 w-4 text-lime" /> : <Copy className="h-4 w-4" />}
                     </button>
                   )}
-                  {link || !user ? (
+                  {user ? (
+                    <button
+                      type="button"
+                      onClick={send}
+                      disabled={sending}
+                      className="inline-flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-lime px-5 py-3 text-sm font-bold text-lime-foreground transition-colors hover:bg-lime/90 disabled:opacity-60 sm:flex-none"
+                    >
+                      <client.icon className="h-4 w-4" />
+                      {sending ? "Starting..." : `Start in ${client.label}`}
+                      <ArrowUpRight className="h-4 w-4" />
+                    </button>
+                  ) : (
                     <a
-                      href={!hasIdea ? "#" : user ? link ?? "#" : signInLink}
-                      target={hasIdea && user && target !== "claude-code" ? "_blank" : undefined}
-                      rel="noopener noreferrer"
-                      onClick={open}
+                      href={signInLink}
                       className="inline-flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-lime px-5 py-3 text-sm font-bold text-lime-foreground transition-colors hover:bg-lime/90 sm:flex-none"
                     >
                       <client.icon className="h-4 w-4" />
-                      {link ? `Open in ${client.label}` : "Copy Codex command"}
-                      {target !== "claude-code" && link && <ArrowUpRight className="h-4 w-4" />}
+                      Start in {client.label}
+                      <ArrowUpRight className="h-4 w-4" />
                     </a>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={hasIdea ? copyCommand : () => inputRef.current?.focus()}
-                      className="inline-flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-lime px-5 py-3 text-sm font-bold text-lime-foreground transition-colors hover:bg-lime/90 sm:flex-none"
-                    >
-                      {copied ? <Check className="h-4 w-4" /> : <client.icon className="h-4 w-4" />}
-                      {copied ? "Copied" : "Copy Codex command"}
-                    </button>
                   )}
                 </div>
               </div>
             </div>
           </div>
+
+          {sendError && (
+            <p role="alert" className="mt-3 text-center text-xs text-destructive">
+              {sendError}
+            </p>
+          )}
 
           <p className="mt-3 text-center text-xs text-foreground/70">
             {ready && !user ? (

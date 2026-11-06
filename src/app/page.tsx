@@ -15,8 +15,8 @@ export default function ExplorePage() {
       <main>
         <h1 className="sr-only">AgentWe: describe it, your AI team builds it</h1>
         <div className="mx-auto max-w-[1600px] px-3 py-4 sm:px-4">
-          <FeaturedCreators />
           <ToolsAndStart />
+          <FeaturedCreators />
           <Suspense>
             <YourProjects />
           </Suspense>

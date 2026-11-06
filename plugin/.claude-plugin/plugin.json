@@ -1,6 +1,6 @@
 {
   "name": "agentwe",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Describe what you want to build. A Brain plans it and coordinates specialist agents, with progress on your AgentWe dashboard.",
   "author": { "name": "AgentWe" },
   "license": "MIT",

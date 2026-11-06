@@ -14,7 +14,7 @@ Nový plugin pak nainstaluješ příkazem ze stránky **Connect**.
 
 ## 1. Web bez přihlášení
 
-1. Otevři Explore (`/`), projdi běžící karty, schéma s mozkem a FAQ. Otevři **MCP** a **Pricing**, na ceníku přepni Monthly a Yearly.
+1. Otevři Explore (`/`), projdi běžící karty, schéma s mozkem a FAQ. Otevři **MCP** a **Pricing**, na ceníku přepni Monthly a Yearly. V patičce otevři **Terms** a **Privacy**.
 2. Otevři `/agents`, vyhledej „Unity“, vyber oddělení a otevři detail agenta.
 3. V horním pruhu vyber creatora, zvol modely Brainu a specialistů a obnov stránku. Volba musí zůstat.
 
@@ -56,6 +56,10 @@ Jde otestovat až po nasazení na veřejnou HTTPS adresu, postup je v `docs/MCP.
 ## 6. ChatGPT a Codex
 
 Jde otestovat až po nasazení. Na stránce **MCP** vyber záložku a projdi návod. Ověř přihlášení, založení projektu a jeho zobrazení na dashboardu.
+
+## 7. Živý canvas
+
+Nejdřív spusť migraci `supabase/migrations/00007_live_preview.sql`. Na stránce creatora napiš zadání a klikni na **Start in Claude Code**. Otevře se Claude Code a tahle stránka přejde na projekt. Po stisknutí Enter a schválení plánu sleduj, jak přibývají widgety a jak se mění mapa týmu.
 
 ## Co hledat
 

@@ -5,6 +5,7 @@ import { catalogAgents, divisionIds, getCatalogAgent } from "@/lib/agent-catalog
 import { readAgentInstructions } from "@/lib/agent-instructions";
 import { afterFailure, budgetState } from "@/lib/mcp/guardrails";
 import { buildPrompt, serverInstructions } from "@/lib/mcp/instructions";
+import { MAX_PREVIEW_SECTIONS, MAX_SECTION_CSS, MAX_SECTION_HTML } from "@/lib/preview";
 import { projectKinds } from "@/lib/project-kinds";
 
 const projectId = z.string().uuid().describe("Project ID");
@@ -356,6 +357,59 @@ export function createMcpServer(supabase: SupabaseClient, userId: string) {
         stop: state.exceeded,
         ...(state.exceeded && { reason: "The budget is used up. Stop and ask the user." }),
       });
+    }
+  );
+
+  server.registerTool(
+    "update_preview",
+    {
+      description:
+        "Show a widget on the project's live canvas, so the user watches the product grow. Call it each time a visible part is built or changes. Send the same section_id to replace a widget. Send empty html and css to remove it. Publish only what really exists in the project, never invented features.",
+      inputSchema: {
+        project_id: projectId,
+        agent_name: agentName,
+        section_id: z.string().min(1).max(100).describe("Stable ID of this widget, such as hero or pricing"),
+        title: z.string().min(1).max(100).describe("Short name shown to the user, such as Pricing table"),
+        html: z.string().max(MAX_SECTION_HTML).describe("Self-contained HTML of this widget. Scripts run. No network requests, only images and web fonts"),
+        css: z.string().max(MAX_SECTION_CSS).default("").describe("CSS for this widget. Use a section called theme for shared styles"),
+        position: z.number().int().min(0).max(1000).optional().describe("Order on the page. Lower is higher up. Defaults to the end"),
+      },
+    },
+    async ({ project_id, agent_name, section_id, title, html, css, position }) => {
+      const sections = must(
+        await supabase.from("preview_sections").select("section_id, position, version").eq("project_id", project_id)
+      );
+      const existing = sections?.find((section) => section.section_id === section_id);
+
+      if (!html && !css) {
+        must(await supabase.from("preview_sections").delete().eq("project_id", project_id).eq("section_id", section_id));
+        await logEvent(project_id, agent_name, "decision", `Removed ${title} from the preview`);
+        return reply({ removed: section_id });
+      }
+      if (!existing && (sections?.length ?? 0) >= MAX_PREVIEW_SECTIONS) {
+        return refuse(`The preview is limited to ${MAX_PREVIEW_SECTIONS} widgets. Replace or remove one first.`);
+      }
+
+      const version = (existing?.version ?? 0) + 1;
+      const end = Math.max(-1, ...(sections ?? []).map((section) => section.position)) + 1;
+      must(
+        await supabase.from("preview_sections").upsert(
+          {
+            project_id,
+            section_id,
+            title,
+            html,
+            css,
+            position: position ?? existing?.position ?? end,
+            agent_name,
+            version,
+            updated_at: new Date().toISOString(),
+          },
+          { onConflict: "project_id,section_id" }
+        )
+      );
+      await logEvent(project_id, agent_name, "decision", `${existing ? "Updated" : "Added"} ${title} on the preview`);
+      return reply({ section_id, version });
     }
   );
 

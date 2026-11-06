@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Bot, FolderKanban, Globe, Plug, ShieldCheck, Zap } from "lucide-react";
-import { QuickStart } from "@/components/explore/quick-start";
+import { StartBanner } from "@/components/explore/start-banner";
 import { SceneVideo } from "@/components/landing/scene-video";
 import { agentCount, divisionIds } from "@/lib/agent-catalog";
 import { creators, creatorHref } from "@/lib/creators";
@@ -17,7 +17,7 @@ const tools = [
 
 export function FeaturedCreators() {
   return (
-    <section aria-label="Creators" className="overflow-hidden motion-reduce:overflow-x-auto">
+    <section aria-label="Creators" className="mt-8 overflow-hidden motion-reduce:overflow-x-auto">
       <div
         className="marquee flex w-max hover:[animation-play-state:paused] focus-within:[animation-play-state:paused]"
         style={{ animationDuration: "120s" }}
@@ -55,20 +55,20 @@ export function FeaturedCreators() {
 
 export function ToolsAndStart() {
   return (
-    <section className="mt-8 grid gap-3 sm:gap-4 lg:grid-cols-2">
-      <div className="relative flex min-h-80 flex-col justify-end overflow-hidden rounded-xl border border-border p-5 sm:p-7">
+    <section className="grid gap-3 sm:gap-4 lg:grid-cols-2">
+      <div className="relative flex min-h-80 flex-col justify-end overflow-hidden rounded-xl border border-border p-5 sm:p-7 lg:order-2">
         <SceneVideo name="ambient" className="absolute inset-0 h-full w-full object-cover opacity-70" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
         <div className="relative">
           <h2 className="text-3xl font-black uppercase leading-[1.05] tracking-tight sm:text-5xl">
-            Your AI company.
+            Start building.
             <br />
-            <span className="text-lime">Ready when you are.</span>
+            <span className="text-lime">Your team is ready.</span>
           </h2>
           <p className="mb-4 mt-3 max-w-md text-sm text-foreground/80">
             One Brain and {agentCount} specialists plan, build and verify software on your own Claude or ChatGPT account.
           </p>
-          <QuickStart />
+          <StartBanner />
         </div>
       </div>
 

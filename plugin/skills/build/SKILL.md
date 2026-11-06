@@ -14,7 +14,7 @@ All tools named below come from the `agentwe` MCP server. If they are unavailabl
 
 ## 1. Set up
 
-1. If the request contains a project ID, call `get_project` and continue that project, starting at the first unfinished step.
+1. If the request contains a project ID, call `get_project` and continue that project, starting at the first unfinished step. A project started on the website has no tasks yet, so skip to step 3 and then plan it.
 2. Otherwise ask only the questions you cannot reasonably decide yourself, then call `create_project` with a name, description, `kind` (website, app, game, startup or anything) and the `divisions` the work needs.
 3. Call `report_status` as agent `Brain`, role `brain`, status `working`, phase `planning`, with `model` set to the model you run on.
 4. Tell the user the project is on their dashboard.
@@ -33,6 +33,8 @@ All tools named below come from the `agentwe` MCP server. If they are unavailabl
 Set the phase with `report_status` as work moves through development, testing, review and complete.
 
 For each specialist with pending tasks, start the `agentwe:specialist` agent and give it the project ID, its catalog slug, its catalog name and its own working folder, `agents/<slug>/` unless the project structure needs a different folder. Run independent specialists in parallel. Run dependent ones in order.
+
+For websites, apps, games and other visual work, the user watches a live canvas. Before design work starts, publish shared styles with `update_preview`, section `theme`. Tell every specialist who builds something visible to publish it the same way.
 
 If the request says `Specialist model: <name>`, set the `model` parameter to that name every time you start a specialist, and tell the specialist its model. Otherwise specialists run on `sonnet`.
 
