@@ -1,36 +1,35 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Codeforge AI
 
-## Getting Started
+Describe what you want to build. A Brain and specialist agents plan, build and verify it on your own Claude account, with progress on your dashboard.
 
-First, run the development server:
+Live app: https://codeforge-drab-three.vercel.app
+
+## Connect Claude Code
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+claude plugin install codeforge --marketplace dosty340-max/codeforge && claude mcp login plugin:codeforge:codeforge
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then run this in Claude Code:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+/codeforge:build A 2D platformer with ten levels
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Develop
 
-## Learn More
+```bash
+npm install
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+Copy `.env.example` to `.env.local` and add your Supabase project. Apply the files in `supabase/migrations` in order.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Documentation
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- [Testing guide](docs/TESTING.md)
+- [MCP server and plugin](docs/MCP.md)
+- [Agent catalog](docs/AGENCY_AGENTS.md)
+- [Roadmap](docs/ROADMAP.md)
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The agent catalog in `vendor/agency-agents` comes from [Agency Agents](https://github.com/msitarzewski/agency-agents) under the MIT License.
