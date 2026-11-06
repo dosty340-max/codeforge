@@ -78,7 +78,7 @@ function ConsentForm() {
           <ShieldCheck className="h-6 w-6 text-lime" />
           <h1 className="mt-4 text-xl font-bold tracking-tight">Connect {details.client.name}?</h1>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-            It will be able to create and update your Codeforge projects, tasks, agents and project memory as{" "}
+            It will be able to create and update your AgentWe projects, tasks, agents and project memory as{" "}
             <span className="text-foreground">{details.user.email}</span>.
           </p>
           <p className="mt-4 break-all text-xs text-muted-foreground">Returns to: {details.redirect_uri}</p>

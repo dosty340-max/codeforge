@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 
-export function ResendConfirmation({ email }: { email: string }) {
+export function ResendConfirmation({ email, next }: { email: string; next: string }) {
   const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle");
   const [error, setError] = useState("");
 
@@ -14,7 +14,7 @@ export function ResendConfirmation({ email }: { email: string }) {
     const { error } = await createClient().auth.resend({
       type: "signup",
       email,
-      options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
+      options: { emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}` },
     });
 
     if (error) {

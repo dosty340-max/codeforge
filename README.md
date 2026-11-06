@@ -1,4 +1,4 @@
-# Codeforge AI
+# AgentWe
 
 Describe what you want to build. A Brain and specialist agents plan, build and verify it on your own Claude account, with progress on your dashboard.
 
@@ -7,13 +7,13 @@ Live app: https://codeforge-drab-three.vercel.app
 ## Connect Claude Code
 
 ```bash
-claude plugin install codeforge --marketplace dosty340-max/codeforge && claude mcp login plugin:codeforge:codeforge
+claude plugin install agentwe --marketplace dosty340-max/codeforge && claude mcp login plugin:agentwe:agentwe
 ```
 
 Then run this in Claude Code:
 
 ```
-/codeforge:build A 2D platformer with ten levels
+/agentwe:build A 2D platformer with ten levels
 ```
 
 ## Develop

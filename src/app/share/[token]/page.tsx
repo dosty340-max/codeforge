@@ -46,7 +46,7 @@ export default async function SharedProjectPage({ params }: { params: Promise<{ 
     <div className="min-h-screen">
       <header className="border-b border-border">
         <div className="mx-auto flex h-14 max-w-3xl items-center justify-between gap-3 px-4">
-          <Link href="/" aria-label="Codeforge AI home">
+          <Link href="/" aria-label="AgentWe home">
             <LogoFull />
           </Link>
           <Link href="/register" className="whitespace-nowrap text-sm font-semibold text-lime hover:underline">

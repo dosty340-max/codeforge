@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { ArrowRight, Brain, Check } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import { SceneVideo } from "@/components/landing/scene-video";
+import { TeamDiagram } from "@/components/landing/team-diagram";
 import { agentCount, divisionIcons, divisionIds, divisions } from "@/lib/agent-catalog";
 
 const steps = [
@@ -8,7 +9,7 @@ const steps = [
     scene: "plan" as const,
     eyebrow: "01 — Plan",
     title: "One sentence becomes a real plan",
-    copy: "Describe your project to Claude. The Brain turns it into a spec, contracts and tasks, then assigns each task to the right specialist.",
+    copy: "Describe your project. The Brain turns it into a spec, contracts and tasks, then assigns each task to the right specialist.",
     points: ["Spec, contracts, decisions and tasks in shared memory", "Every memory entry is versioned", "Only the Brain can change a contract"],
     label: "A typed project request is split by the Brain into four tasks",
   },
@@ -30,69 +31,9 @@ const steps = [
   },
 ];
 
-export function Hero() {
-  return (
-    <section className="relative overflow-hidden">
-      <div className="mx-auto max-w-5xl px-6 pt-20 sm:pt-28 text-center">
-        <p className="text-sm font-medium text-lime">Websites. Apps. Games. Startups. Anything you can describe.</p>
-        <h1 className="mt-5 text-5xl font-bold leading-[1.05] tracking-tight sm:text-7xl">
-          Describe it.
-          <br />
-          <span className="text-lime">Codeforge builds it.</span>
-        </h1>
-        <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-          Your AI company, led by Claude. One Brain and {agentCount} specialists plan, build, test
-          and deliver whatever you have in mind, while you stay in control from a single conversation.
-        </p>
-        <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <Link
-            href="/register"
-            className="inline-flex items-center gap-2 rounded-lg bg-lime px-6 py-3 text-sm font-semibold text-lime-foreground transition-colors hover:bg-lime/90"
-          >
-            Start building free <ArrowRight className="h-4 w-4" />
-          </Link>
-          <Link
-            href="#how-it-works"
-            className="inline-flex items-center rounded-lg border border-border px-6 py-3 text-sm text-muted-foreground transition-colors hover:border-lime/30 hover:text-foreground"
-          >
-            See how it works
-          </Link>
-        </div>
-      </div>
-
-      <div className="mx-auto mt-12 max-w-6xl px-6">
-        <div className="hero-fade relative overflow-hidden rounded-t-xl border-x border-t border-border">
-          <SceneVideo
-            name="network"
-            label="The Brain sends tasks to eight specialist agents arranged around it"
-            className="block aspect-video w-full object-cover"
-          />
-        </div>
-        <p className="-mt-4 text-center text-xs text-muted-foreground">Illustrative product preview</p>
-      </div>
-    </section>
-  );
-}
-
-export function RoleMarquee() {
-  const names = ["Brain", ...divisionIds.map((id) => divisions[id].label)];
-  return (
-    <div className="mt-16 overflow-hidden border-y border-border py-4" aria-hidden="true">
-      <div className="marquee flex w-max gap-10 font-mono text-sm text-muted-foreground">
-        {[...names, ...names, ...names, ...names].map((name, i) => (
-          <span key={i} className="flex items-center gap-10 whitespace-nowrap">
-            {name}
-            <span className="h-1 w-1 rounded-full bg-lime" />
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 export function Steps() {
   return (
-    <section id="how-it-works" className="mx-auto max-w-6xl scroll-mt-28 space-y-24 px-6 py-24">
+    <section id="how-it-works" className="mx-auto max-w-6xl scroll-mt-20 space-y-24 px-6 py-24">
       <div className="reveal mx-auto max-w-2xl text-center">
         <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">From idea to verified result</h2>
         <p className="mt-4 text-muted-foreground">Three stages, one conversation. Here is what happens after you press enter.</p>
@@ -126,42 +67,32 @@ export function Steps() {
 
 export function Team() {
   return (
-    <section id="team" className="scroll-mt-28 border-y border-border bg-card/40">
+    <section id="team" className="scroll-mt-20 border-y border-border bg-card/40">
       <div className="mx-auto max-w-6xl px-6 py-24">
         <div className="reveal mx-auto max-w-2xl text-center">
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">A whole company of specialists</h2>
+          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">What happens when you press Enter</h2>
           <p className="mt-4 text-muted-foreground">
-            {agentCount} agents across {divisionIds.length} departments, each doing one job well.
-            Pick the teams your project needs. You only talk to the Brain.
+            One Brain picks from {agentCount} specialists in {divisionIds.length} departments, on your own Claude or
+            ChatGPT account. You only talk to the Brain.
           </p>
         </div>
 
-        <div className="reveal mx-auto mt-12 flex max-w-2xl items-center gap-4 rounded-xl border border-lime/30 bg-lime/5 p-5">
-          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-lime text-lime-foreground">
-            <Brain className="h-6 w-6" />
-          </span>
-          <div>
-            <h3 className="font-semibold">
-              Brain <span className="ml-1 font-mono text-xs font-normal text-lime">Opus 5.5</span>
-            </h3>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Splits the work into tasks, hands each to the right specialist and checks every step before work moves on.
-            </p>
-          </div>
+        <div className="reveal mt-12">
+          <TeamDiagram />
         </div>
 
-        <ul className="reveal mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="reveal mt-12 flex flex-wrap justify-center gap-2">
           {divisionIds.map((id) => {
             const Icon = divisionIcons[id];
             return (
               <li key={id}>
                 <Link
                   href={`/agents?division=${id}`}
-                  className="flex items-center gap-3 rounded-xl border border-border bg-card p-4 transition-colors hover:border-lime/30"
+                  className="flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium transition-colors hover:border-lime/30"
                 >
-                  <Icon className="h-5 w-5 shrink-0" style={{ color: divisions[id].color }} />
-                  <span className="flex-1 text-sm font-semibold">{divisions[id].label}</span>
-                  <span className="font-mono text-xs text-muted-foreground">{divisions[id].count}</span>
+                  <Icon className="h-3.5 w-3.5 shrink-0" style={{ color: divisions[id].color }} />
+                  {divisions[id].label}
+                  <span className="font-mono text-muted-foreground">{divisions[id].count}</span>
                 </Link>
               </li>
             );

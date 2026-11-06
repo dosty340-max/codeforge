@@ -1,11 +1,11 @@
 {
-  "name": "codeforge",
-  "owner": { "name": "Codeforge AI" },
+  "name": "agentwe",
+  "owner": { "name": "AgentWe" },
   "plugins": [
     {
-      "name": "codeforge",
+      "name": "agentwe",
       "source": "./plugin",
-      "description": "Plan and build software with a Brain and specialist agents, with progress on your Codeforge dashboard."
+      "description": "Plan and build software with a Brain and specialist agents, with progress on your AgentWe dashboard."
     }
   ]
 }

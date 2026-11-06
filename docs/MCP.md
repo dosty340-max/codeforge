@@ -1,6 +1,6 @@
 # MCP server
 
-Claude se s Codeforge spojuje přes `/mcp` (Streamable HTTP, bez session). Každý požadavek běží s tokenem uživatele, takže u všech nástrojů platí Row Level Security a server nepotřebuje tajný klíč.
+Claude se s AgentWe spojuje přes `/mcp` (Streamable HTTP, bez session). Každý požadavek běží s tokenem uživatele, takže u všech nástrojů platí Row Level Security a server nepotřebuje tajný klíč.
 
 ## Zapnutí přihlášení
 
@@ -23,7 +23,7 @@ Plugin ve složce `plugin/` server přidá sám. Adresa je v `plugin/.mcp.json` 
 Stav „Claude is connected“ zapisuje `/mcp` do `mcp_connections`, jen pro OAuth tokeny s `client_id`. Bez pluginu:
 
 ```bash
-claude mcp add --transport http codeforge http://localhost:3000/mcp
+claude mcp add --transport http agentwe http://localhost:3000/mcp
 ```
 
 Pak v Claude Code spusť `/mcp` a schval přístup. Claude na webu a v desktopové aplikaci potřebuje veřejnou HTTPS adresu, proto se při nasazení nastaví `NEXT_PUBLIC_SITE_URL`.
@@ -70,8 +70,18 @@ Commity musí mít autora `dosty340-max`, jinak je plán Hobby u soukromého rep
 
 Kola vyjednávání mezi agenty (maximálně 2) server nehlídá, jsou v pravidlech pluginu. Spotřebu tokenů hlásí Brain, server ji sám neměří.
 
+## ChatGPT a Codex
+
+Návody pro uživatele jsou v `src/lib/clients.ts` a na stránce `/connect`.
+
+- **ChatGPT:** Plugins, plus, Add custom MCP server, adresa `/mcp`. Zdroj: [Apps SDK](https://developers.openai.com/apps-sdk/deploy/connect-chatgpt).
+- **Codex:** `codex mcp add agentwe --url <adresa>/mcp` a `codex mcp login agentwe`. Zdroj: [Codex MCP](https://learn.chatgpt.com/docs/extend/mcp?surface=cli).
+
+Server i Supabase nabízejí OAuth discovery, dynamickou registraci klientů a PKCE. Skutečné připojení z ChatGPT a Codexu je potřeba ověřit po nasazení.
+
 ## Plugin
 
-- `plugin/skills/build/SKILL.md`: příkaz `/codeforge:build`, hlavní konverzace v něm funguje jako Brain.
-- `plugin/agents/specialist.md`: obecný specialista na Sonnetu, svou roli si načte přes `get_agent_instructions`.
+- `plugin/skills/build/SKILL.md`: příkaz `/agentwe:build`, hlavní konverzace v něm funguje jako Brain na Opusu.
+- `plugin/skills/build-fable`, `build-sonnet`, `build-haiku`: stejný postup s jiným modelem Brainu, načítají `build/SKILL.md`.
+- `plugin/agents/specialist.md`: obecný specialista, výchozí je Sonnet. Brain mu může model změnit parametrem `model`, když zadání obsahuje `Specialist model: <název>`. Svou roli si načte přes `get_agent_instructions`.
 - `.claude-plugin/marketplace.json`: instalace z tohoto repozitáře.

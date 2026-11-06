@@ -40,7 +40,7 @@ export function ProjectTeam({ team }: { team: string[] }) {
             })}
           </ul>
           <details className="mt-4 text-xs text-muted-foreground">
-            <summary className="cursor-pointer">Use these agents without Codeforge</summary>
+            <summary className="cursor-pointer">Use these agents without AgentWe</summary>
             <p className="mb-2 mt-2">The plugin loads specialists automatically. To install this team directly in Claude Code, run:</p>
             <CommandBlock command={teamInstallCommand(selected)} />
           </details>

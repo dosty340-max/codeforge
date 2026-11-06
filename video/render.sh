@@ -8,7 +8,10 @@ work="$(mktemp -d)"
 trap 'rm -rf "$work"' EXIT
 mkdir -p "$root/public/video"
 
-for comp in network plan build verify; do
+comps=(network ambient plan build verify creator-website creator-app creator-game creator-startup creator-agent creator-automation creator-extension creator-anything)
+(( $# )) && comps=("$@")
+
+for comp in $comps; do
   "$aerender" -project "$root/video/scenes.aep" -comp "$comp" -output "$work/$comp.mp4" -sound OFF
   ffmpeg -y -loglevel error -i "$work/$comp.mp4" -c:v libx264 -crf 26 -preset slow -pix_fmt yuv420p -movflags +faststart -an "$root/public/video/$comp.mp4"
   ffmpeg -y -loglevel error -ss 5 -i "$root/public/video/$comp.mp4" -frames:v 1 -q:v 4 "$root/public/video/$comp.jpg"

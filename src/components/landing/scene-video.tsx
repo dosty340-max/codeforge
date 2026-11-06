@@ -6,10 +6,12 @@ export function SceneVideo({
   name,
   label,
   className,
+  startAt,
 }: {
-  name: "network" | "plan" | "build" | "verify";
+  name: "network" | "ambient" | "plan" | "build" | "verify" | `creator-${string}`;
   label?: string;
   className?: string;
+  startAt?: number;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -38,7 +40,7 @@ export function SceneVideo({
       aria-hidden={label ? undefined : true}
       className={className}
     >
-      <source src={`/video/${name}.mp4`} type="video/mp4" />
+      <source src={`/video/${name}.mp4${startAt ? `#t=${startAt}` : ""}`} type="video/mp4" />
     </video>
   );
 }

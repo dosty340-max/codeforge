@@ -1,6 +1,6 @@
 {
   "mcpServers": {
-    "codeforge": {
+    "agentwe": {
       "type": "http",
       "url": "https://codeforge-drab-three.vercel.app/mcp"
     }

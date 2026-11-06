@@ -1,5 +1,30 @@
 # Rozhodnutí
 
+## 2026-11-06: Podpora ChatGPT a Codexu
+- **Rozhodnutí:** AgentWe se připojuje ze čtyř nástrojů: Claude Code, Claude in Chrome, ChatGPT a Codex. Stránka MCP má pro každý záložku a návod
+- **Důvod:** Uživatel chce být dostupný i pro uživatele ChatGPT. Server je standardní MCP s OAuth, takže stačí stejná adresa
+- **Dopad:** Pravidla serveru už nepředpokládají Claude. Výběr modelů funguje jen tam, kde ho umíme předat: v Claude Code a v Claude. Odkaz do ChatGPT přes `?q=` není dokumentovaný a Codex odkaz nemá, proto se u něj kopíruje příkaz. Plugin s paralelními specialisty je zatím jen pro Claude Code
+
+## 2026-11-06: Samostatný ceník a roční sleva 30 %
+- **Rozhodnutí:** Ceník je na `/pricing` s přepínačem měsíčně a ročně, Pro stojí 29 USD měsíčně nebo 243,60 USD ročně
+- **Důvod:** Uživatel chce přehledný ceník a slevu za roční platbu, která láká
+- **Dopad:** Platby zatím nejsou napojené, proto stránka říká, že Pro platby se otevřou brzy. Při napojení Stripe musí sedět stejné ceny. Sleva je stálá za roční platbu, bez falešného odpočtu
+
+## 2026-11-06: Stránka MCP na `/connect`
+- **Rozhodnutí:** Veřejná stránka MCP běží na `/connect`, ne na `/mcp`
+- **Důvod:** Adresa `/mcp` patří samotnému MCP serveru a její změna by rozbila připojení
+- **Dopad:** Stav připojení dál ukazuje `/home/connect`, návod sdílí obě stránky
+
+## 2026-11-06: Nový název AgentWe
+- **Rozhodnutí:** Codeforge AI se přejmenovává na AgentWe (vždy s velkým W), logo je limetkový čtverec s tmavým W
+- **Důvod:** `codeforge.com` i `codeforge.ai` jsou obsazené a uživatel chce jedinečné jméno, ze kterého je poznat, že jde o agenty
+- **Dopad:** Příkazy jsou `/agentwe:build`. Adresa `codeforge-drab-three.vercel.app` a repozitář `dosty340-max/codeforge` zůstávají, dokud je uživatel nezmění. Staré migrace se nepřepisují
+
+## 2026-11-06: Výběr modelů pro Brain a specialisty
+- **Rozhodnutí:** Uživatel volí model Brainu a specialistů přímo při zadání projektu, výchozí jsou Opus a Sonnet
+- **Důvod:** Volba modelu patří uživateli, ne nám
+- **Dopad:** Odkaz do Claude Code neumí nastavit model, proto má každý model Brainu vlastní příkaz (`/agentwe:build-fable` a další). Ten platí jen do konce tahu, takže Brain schvaluje plán ve stejném tahu přes `AskUserQuestion`. Na webu se model předává nedokumentovaným parametrem `model` v adrese claude.ai a všechny role dělá jeden model
+
 ## 2026-11-06: Design systém — Higgsfield styl
 - **Rozhodnutí:** Dark theme s lime (#c8ff00) akcenty, inspirace Higgsfield.ai
 - **Důvod:** Uživatel specifikoval tento styl
@@ -29,7 +54,7 @@
 
 ## 2026-11-06: Katalog agentů podle Agency Agents
 - **Rozhodnutí:** Pevnou osmičku specialistů nahradí katalog podle `msitarzewski/agency-agents` s výběrem týmů
-- **Důvod:** Uživatel to chce přidat podle reelu a Codeforge má stavět weby, aplikace, hry i startupy
+- **Důvod:** Uživatel to chce přidat podle reelu an AgentWe má stavět weby, aplikace, hry i startupy
 - **Dopad:** Zadání v `docs/AGENCY_AGENTS.md`, změny databáze a plugin. Licence MIT, Brain zůstává jediný orchestrátor
 - **Zdroj agentů:** Kopie konkrétního commitu v `vendor/agency-agents`, aby se text agentů neměnil bez naší kontroly
 

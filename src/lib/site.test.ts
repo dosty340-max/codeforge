@@ -9,6 +9,6 @@ test("safePath keeps same-site paths", () => {
 
 test("safePath rejects other websites", () => {
   for (const path of ["//evil.com", "/\\evil.com", "https://evil.com", "", null]) {
-    assert.equal(safePath(path), "/home");
+    assert.equal(safePath(path), "/");
   }
 });

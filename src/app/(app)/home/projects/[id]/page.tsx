@@ -106,9 +106,9 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             <Link href="/home/connect" className="text-lime hover:underline">First time?</Link>
           </p>
           <p className="mb-2 text-xs text-muted-foreground">In Claude Code (recommended):</p>
-          <CommandBlock command={`/codeforge:build ${project.id}`} />
+          <CommandBlock command={`/agentwe:build ${project.id}`} />
           <p className="mb-2 mt-4 text-xs text-muted-foreground">In Claude on the web or desktop, send:</p>
-          <CommandBlock command={`Use Codeforge to continue project ${project.id}`} />
+          <CommandBlock command={`Use AgentWe to continue project ${project.id}`} />
         </Card>
       )}
 

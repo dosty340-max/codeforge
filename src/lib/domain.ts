@@ -47,6 +47,13 @@ export interface Plan {
   features: string[];
 }
 
+export const YEARLY_DISCOUNT = 0.3;
+
+export function yearlyPrice(monthlyPrice: number) {
+  const perYear = Math.round(monthlyPrice * 12 * (1 - YEARLY_DISCOUNT) * 100) / 100;
+  return { perYear, perMonth: Math.round((perYear / 12) * 100) / 100, saved: Math.round((monthlyPrice * 12 - perYear) * 100) / 100 };
+}
+
 export const plans: Plan[] = [
   {
     id: "free",

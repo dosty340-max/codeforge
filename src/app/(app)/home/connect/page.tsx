@@ -1,17 +1,9 @@
 import Link from "next/link";
-import { CheckCircle2, ExternalLink, Plug } from "lucide-react";
-import { ClaudeComparison } from "@/components/agents/claude-comparison";
-import { CommandBlock } from "@/components/agents/command-block";
-import { OpenConnectorButton } from "@/components/agents/open-connector-button";
+import { CheckCircle2, ExternalLink } from "lucide-react";
 import { AutoRefresh } from "@/components/dashboard/auto-refresh";
 import { Card } from "@/components/ui/card";
 import { agentCount, repositoryUrl } from "@/lib/agent-catalog";
 import { getLastClaudeConnection } from "@/lib/data";
-import { siteUrl } from "@/lib/site";
-
-const pluginSource = process.env.NEXT_PUBLIC_PLUGIN_SOURCE ?? "owner/repository";
-const connectCommand = `claude plugin install codeforge --marketplace ${pluginSource} && claude mcp login plugin:codeforge:codeforge`;
-const serverAddress = `${siteUrl}/mcp`;
 
 function formatLastActive(timestamp: string) {
   return new Date(timestamp).toLocaleString("en-US", {
@@ -30,8 +22,8 @@ export default async function ConnectPage() {
       {!lastConnection && <AutoRefresh seconds={5} />}
 
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Connect to Claude</h1>
-        <p className="text-sm text-muted-foreground">Build with your team from Claude and follow the progress here</p>
+        <h1 className="text-2xl font-bold tracking-tight">Your connection</h1>
+        <p className="text-sm text-muted-foreground">Build with your team from your AI tool and follow the progress here</p>
       </div>
 
       <div
@@ -49,73 +41,26 @@ export default async function ConnectPage() {
           </span>
         )}
         <div>
-          <p className="text-sm font-semibold">{lastConnection ? "Claude is connected" : "Waiting for Claude…"}</p>
+          <p className="text-sm font-semibold">{lastConnection ? "Your AI tool is connected" : "Waiting for your AI tool…"}</p>
           <p className="text-xs text-muted-foreground">
             {lastConnection
               ? `Last active ${formatLastActive(lastConnection)}`
-              : "This updates by itself once Claude uses Codeforge for the first time."}
+              : "This updates by itself once your AI tool uses AgentWe for the first time."}
           </p>
         </div>
       </div>
 
-      <ClaudeComparison />
-
-      <Card className="gap-0 border-lime/40 bg-card p-6">
-        <div className="mb-4 flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-lime/10">
-            <Plug className="h-5 w-5 text-lime" />
-          </div>
-          <h2 className="font-semibold">Claude Code</h2>
-          <span className="rounded-full bg-lime px-2 py-0.5 text-[10px] font-bold text-lime-foreground">Recommended</span>
-        </div>
-
-        <ol className="space-y-6">
-          <li className="flex gap-3">
-            <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-lime text-xs font-bold text-lime-foreground">1</span>
-            <div className="min-w-0 flex-1 space-y-2">
-              <p className="text-sm font-medium">Connect once</p>
-              <p className="text-xs leading-relaxed text-muted-foreground">
-                Run this in your terminal. It adds Codeforge and opens your browser, where you approve access.
-              </p>
-              <CommandBlock command={connectCommand} />
-            </div>
-          </li>
-          <li className="flex gap-3">
-            <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-lime text-xs font-bold text-lime-foreground">2</span>
-            <div className="min-w-0 flex-1 space-y-2">
-              <p className="text-sm font-medium">Start building</p>
-              <p className="text-xs leading-relaxed text-muted-foreground">
-                Run this inside Claude Code. The Brain creates the project here and asks you to approve its plan.
-              </p>
-              <CommandBlock command="/codeforge:build A 2D platformer with ten levels" />
-            </div>
-          </li>
-        </ol>
-      </Card>
-
-      <Card className="gap-0 border-border bg-card p-6">
-        <h2 className="font-semibold">Claude on the web or desktop</h2>
-        <p className="mt-1 text-xs text-muted-foreground">No install. Best for planning and smaller work.</p>
-        <ol className="mt-4 list-decimal space-y-1 pl-4 text-xs leading-relaxed text-muted-foreground">
-          <li>In Claude, choose Add custom connector and paste the Codeforge address.</li>
-          <li>Press Connect and approve access on the Codeforge page.</li>
-          <li>Start a chat and ask: Use Codeforge to build a booking page for my barbershop.</li>
-        </ol>
-        <div className="mt-4">
-          {siteUrl.startsWith("https://") ? (
-            <OpenConnectorButton address={serverAddress} />
-          ) : (
-            <p className="rounded-lg bg-secondary px-3 py-2 text-xs text-muted-foreground">
-              Available once Codeforge runs on a public HTTPS address. Local addresses only work with Claude Code.
-            </p>
-          )}
-        </div>
-      </Card>
+      <Link
+        href="/connect"
+        className="flex items-center justify-center gap-2 rounded-xl bg-lime px-4 py-3 text-sm font-bold text-lime-foreground transition-colors hover:bg-lime/90"
+      >
+        How to connect Claude Code, Claude in Chrome, ChatGPT or Codex
+      </Link>
 
       <Card className="gap-0 border-border bg-card p-6">
         <h2 className="text-sm font-semibold">How it works</h2>
         <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-          The Brain runs on Opus and specialists on Sonnet, on your own Claude account. Specialists load from the catalog of {agentCount} agents when needed, so nothing else needs installing. Codeforge never sees your Claude credentials and only has the access you approve.
+          In Claude Code the Brain runs on Opus and specialists on Sonnet by default, and you can pick other models when you create a project. Everything runs on your own AI account. Specialists load from the catalog of {agentCount} agents when needed, so nothing else needs installing. AgentWe never sees your Claude or ChatGPT credentials and only has the access you approve.
         </p>
         <div className="mt-3 flex flex-wrap gap-4 text-xs">
           <Link href="/home/agents" className="text-lime hover:underline">

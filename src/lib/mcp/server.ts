@@ -36,12 +36,12 @@ function agentGroup(role: string, division: string | undefined) {
 }
 
 export function createMcpServer(supabase: SupabaseClient, userId: string) {
-  const server = new McpServer({ name: "codeforge", version: "1.0.0" }, { instructions: serverInstructions });
+  const server = new McpServer({ name: "agentwe", version: "1.0.0" }, { instructions: serverInstructions });
 
   server.registerPrompt(
     "build",
     {
-      title: "Build with Codeforge",
+      title: "Build with AgentWe",
       description: "Plan and build a website, app, game, startup or other software, or continue a project by its ID.",
       argsSchema: { request: z.string().describe("What to build, or a project ID to continue") },
     },
@@ -57,7 +57,7 @@ export function createMcpServer(supabase: SupabaseClient, userId: string) {
   server.registerTool(
     "list_projects",
     { annotations: { readOnlyHint: true },
-      description: "List the user's Codeforge projects with their type, phase and team." },
+      description: "List the user's AgentWe projects with their type, phase and team." },
     async () =>
       reply(
         must(
@@ -279,6 +279,7 @@ export function createMcpServer(supabase: SupabaseClient, userId: string) {
         role: z.string().max(100).describe("brain, or the agent's catalog slug"),
         division: z.string().max(100).optional().describe("Agent catalog department"),
         status: z.enum(["idle", "working", "done", "error", "waiting"]),
+        model: z.string().max(100).optional().describe("The model this agent runs on, such as sonnet or claude-sonnet-5-5"),
         current_task: z.string().max(500).optional(),
         tokens_used: z.number().int().min(0).default(0),
         steps_used: z.number().int().min(0).default(0),
@@ -286,11 +287,11 @@ export function createMcpServer(supabase: SupabaseClient, userId: string) {
         phase_progress: z.number().int().min(0).max(100).optional(),
       },
     },
-    async ({ project_id, agent_name, role, division, status, current_task, tokens_used, steps_used, phase, phase_progress }) => {
+    async ({ project_id, agent_name, role, division, status, model, current_task, tokens_used, steps_used, phase, phase_progress }) => {
       const agent = must(
         await supabase
           .from("agents")
-          .select("tokens_used, steps_used")
+          .select("tokens_used, steps_used, model")
           .eq("project_id", project_id)
           .eq("name", agent_name)
           .maybeSingle()
@@ -304,7 +305,7 @@ export function createMcpServer(supabase: SupabaseClient, userId: string) {
             division,
             group: agentGroup(role, division),
             status,
-            model: role === "brain" ? "claude-opus-5-5" : "claude-sonnet-5-5",
+            model: model ?? agent?.model ?? (role === "brain" ? "claude-opus-5-5" : "claude-sonnet-5-5"),
             current_task: current_task ?? null,
             tokens_used: (agent?.tokens_used ?? 0) + tokens_used,
             steps_used: (agent?.steps_used ?? 0) + steps_used,

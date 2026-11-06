@@ -1,14 +1,24 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useState } from "react";
 import { ResendConfirmation } from "@/components/auth/resend-confirmation";
 import { LogoFull } from "@/components/logo";
+import { safePath } from "@/lib/site";
 import { createClient } from "@/lib/supabase/client";
 
 export default function RegisterPage() {
+  return (
+    <Suspense>
+      <RegisterForm />
+    </Suspense>
+  );
+}
+
+function RegisterForm() {
   const router = useRouter();
+  const destination = safePath(useSearchParams().get("next"));
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,7 +37,7 @@ export default function RegisterPage() {
       password,
       options: {
         data: { full_name: name },
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
+        emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(destination)}`,
       },
     });
 
@@ -43,7 +53,7 @@ export default function RegisterPage() {
       return;
     }
 
-    router.push("/home");
+    router.push(destination);
     router.refresh();
   }
 
@@ -63,7 +73,7 @@ export default function RegisterPage() {
             <p role="status" className="rounded-lg bg-lime/10 px-4 py-3 text-center text-sm text-lime">
               Check {email} and click the link to confirm your account.
             </p>
-            <ResendConfirmation email={email} />
+            <ResendConfirmation email={email} next={destination} />
           </div>
         ) : (
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -116,7 +126,7 @@ export default function RegisterPage() {
 
         <p className="text-center text-xs text-muted-foreground">
           Already have an account?{" "}
-          <Link href="/login" className="text-lime hover:underline">Sign in</Link>
+          <Link href={`/login?next=${encodeURIComponent(destination)}`} className="text-lime hover:underline">Sign in</Link>
         </p>
       </div>
     </div>

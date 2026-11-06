@@ -24,7 +24,7 @@ export default function ResetPasswordPage() {
       setLoading(false);
       return;
     }
-    router.push("/home");
+    router.push("/");
     router.refresh();
   }
 

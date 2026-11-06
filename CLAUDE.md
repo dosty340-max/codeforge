@@ -12,10 +12,13 @@ src/
   app/                    # Next.js App Router
     (app)/home/           # Přihlášená aplikace
     agents/               # Veřejný katalog agentů
+    connect/              # Veřejná stránka MCP
+    create/               # Creatoři a zadání projektu
+    pricing/              # Ceník
     share/[token]/        # Veřejné výsledky projektu
     mcp/                  # MCP server
-    page.tsx              # Landing page
-  components/             # agents, dashboard, home, landing, layout, settings, ui
+    page.tsx              # Explore
+  components/             # agents, dashboard, explore, home, landing, layout, pricing, settings, ui
   lib/
     data.ts               # Čtení dat ze Supabase pro stránky
     mcp/                  # Nástroje MCP serveru a pojistky

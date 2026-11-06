@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: { default: "Codeforge AI", template: "%s — Codeforge AI" },
+  title: { default: "AgentWe", template: "%s — AgentWe" },
   description: "AI-powered multi-agent development platform. Describe your project and let AI agents build it.",
 };
 

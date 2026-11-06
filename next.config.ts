@@ -7,6 +7,12 @@ const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
     "/mcp": ["./vendor/agency-agents/**/*"],
   },
+  async redirects() {
+    return [
+      { source: "/home", destination: "/", permanent: false },
+      { source: "/home/pricing", destination: "/pricing", permanent: false },
+    ];
+  },
   turbopack: {
     rules: {
       "*.css": {

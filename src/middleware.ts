@@ -38,12 +38,12 @@ export async function middleware(request: NextRequest) {
 
   // Redirect authenticated users away from auth pages
   if (user && isAuthPage) {
-    return NextResponse.redirect(new URL("/home", request.url));
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   return supabaseResponse;
 }
 
 export const config = {
-  matcher: ["/home/:path*", "/api/:path*", "/login", "/register"],
+  matcher: ["/", "/create", "/home/:path*", "/api/:path*", "/login", "/register"],
 };

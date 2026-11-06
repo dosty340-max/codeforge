@@ -64,7 +64,7 @@ function LoginForm() {
           {error && (
             <p role="alert" className="rounded-lg bg-destructive/10 px-3 py-2 text-xs text-destructive">{error}</p>
           )}
-          {unconfirmed && <ResendConfirmation email={email} />}
+          {unconfirmed && <ResendConfirmation email={email} next={destination} />}
           <div>
             <label className="text-xs text-muted-foreground">Email</label>
             <input
@@ -100,7 +100,7 @@ function LoginForm() {
           <Link href="/forgot-password" className="text-lime hover:underline">Forgot your password?</Link>
           <br />
           Don&apos;t have an account?{" "}
-          <Link href="/register" className="text-lime hover:underline">Sign up</Link>
+          <Link href={`/register?next=${encodeURIComponent(destination)}`} className="text-lime hover:underline">Sign up</Link>
         </p>
       </div>
     </div>

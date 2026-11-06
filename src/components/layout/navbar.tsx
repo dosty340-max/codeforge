@@ -2,48 +2,49 @@
 
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import {
+  Bot,
+  CreditCard,
+  FolderKanban,
+  LogOut,
+  Plug,
+  Settings,
+  Share2,
+} from "lucide-react";
 import { CreateNav } from "@/components/layout/create-nav";
 import { LogoFull } from "@/components/logo";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { cn } from "@/lib/utils";
 import {
-  Home,
-  FolderKanban,
-  Bot,
-  Plug,
-  Share2,
-  CreditCard,
-  Settings,
-  LogOut,
-  Menu,
-  X,
-} from "lucide-react";
-import { useEffect, useState } from "react";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { getCreator } from "@/lib/creators";
 import { createClient } from "@/lib/supabase/client";
+import { useCurrentUser } from "@/lib/use-session";
 
-const tabs = [
-  { href: "/home", label: "Home", icon: Home },
+const accountLinks = [
   { href: "/home/projects", label: "Projects", icon: FolderKanban },
-  { href: "/home/agents", label: "Agents", icon: Bot },
-  { href: "/home/connect", label: "Connect", icon: Plug },
-  { href: "/home/shared", label: "Results", icon: Share2 },
-  { href: "/home/pricing", label: "Pricing", icon: CreditCard },
+  { href: "/agents", label: "Agent catalog", icon: Bot },
+  { href: "/home/shared", label: "Shared results", icon: Share2 },
+  { href: "/home/connect", label: "Your connection", icon: Plug },
+  { href: "/pricing", label: "Pricing", icon: CreditCard },
+  { href: "/home/settings", label: "Settings", icon: Settings },
 ];
+
+const navItem: Record<string, string> = { "/": "explore", "/connect": "mcp", "/pricing": "pricing" };
+
+function initialsOf(label: string) {
+  return label.split(/\s+/).map((word) => word[0]).join("").slice(0, 2).toUpperCase();
+}
 
 export function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
-  const activeKind = useSearchParams().get("type");
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [initials, setInitials] = useState("");
-
-  useEffect(() => {
-    createClient().auth.getSession().then(({ data: { session } }) => {
-      const user = session?.user;
-      const label: string = user?.user_metadata.full_name || user?.email || "";
-      setInitials(label.split(/\s+/).map((word) => word[0]).join("").slice(0, 2).toUpperCase());
-    });
-  }, []);
+  const type = useSearchParams().get("type");
+  const { ready, user } = useCurrentUser();
 
   async function signOut() {
     await createClient().auth.signOut({ scope: "local" });
@@ -52,109 +53,60 @@ export function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
-    <nav aria-label="Main">
-      <div className="mx-auto flex h-12 max-w-7xl items-center gap-6 px-4">
-        <Link href="/home">
+    <header className="sticky top-0 z-50 border-b border-border bg-background/85 backdrop-blur-md">
+      <div className="mx-auto flex max-w-[1600px] flex-wrap items-center px-4 lg:flex-nowrap">
+        <Link href="/" aria-label="AgentWe home" className="shrink-0 py-3">
           <LogoFull />
         </Link>
 
-        {/* Desktop tabs */}
-        <div className="hidden md:flex items-center justify-center gap-1 flex-1">
-          {tabs.map((tab) => {
-            const active = pathname === tab.href || (tab.href !== "/home" && pathname.startsWith(tab.href));
-            return (
-              <Link
-                key={tab.href}
-                href={tab.href}
-                className={cn(
-                  "flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors",
-                  active
-                    ? "bg-lime/10 text-lime"
-                    : "text-muted-foreground hover:text-foreground hover:bg-secondary"
-                )}
-              >
-                {tab.label}
-                {tab.label === "Agents" && (
-                  <span className="rounded bg-lime/20 px-1 py-0.5 text-[9px] font-bold text-lime leading-none">
-                    LIVE
-                  </span>
-                )}
-              </Link>
-            );
-          })}
+        <div className="order-last w-full min-w-0 lg:order-none lg:w-auto lg:flex-1">
+          <CreateNav active={navItem[pathname] ?? (pathname === "/create" ? getCreator(type).id : null)} />
         </div>
 
-        {/* Right side */}
-        <div className="ml-auto flex items-center gap-3">
-          <Link
-            href="/home/settings"
-            className="hidden md:flex items-center text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <Settings className="h-4 w-4" />
-          </Link>
-          <Avatar className="h-7 w-7 border border-border">
-            <AvatarFallback className="bg-secondary text-[10px]">{initials}</AvatarFallback>
-          </Avatar>
-          <button
-            onClick={signOut}
-            className="hidden md:flex items-center gap-1.5 whitespace-nowrap text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <LogOut className="h-4 w-4" />
-            Sign out
-          </button>
+        <div className="ml-auto flex h-8 shrink-0 items-center gap-2 lg:ml-0">
+          {ready && !user && (
+            <>
+              <Link
+                href="/login"
+                className="whitespace-nowrap rounded-lg px-3 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+              >
+                Login
+              </Link>
+              <Link
+                href="/register"
+                className="whitespace-nowrap rounded-lg bg-lime px-3 py-1.5 text-sm font-semibold text-lime-foreground transition-colors hover:bg-lime/90"
+              >
+                Sign up
+              </Link>
+            </>
+          )}
 
-          {/* Mobile hamburger */}
-          <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden text-muted-foreground hover:text-foreground"
-          >
-            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
+          {user && (
+            <DropdownMenu>
+              <DropdownMenuTrigger aria-label="Open account menu" className="block rounded-full focus:outline-none focus:ring-2 focus:ring-lime">
+                <Avatar className="h-8 w-8 border border-border">
+                  <AvatarFallback className="bg-secondary text-[11px]">
+                    {initialsOf(user.user_metadata.full_name || user.email || "")}
+                  </AvatarFallback>
+                </Avatar>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-52">
+                {accountLinks.map((link) => (
+                  <DropdownMenuItem key={link.href} render={<Link href={link.href} />}>
+                    <link.icon className="h-4 w-4" />
+                    {link.label}
+                  </DropdownMenuItem>
+                ))}
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={signOut}>
+                  <LogOut className="h-4 w-4" />
+                  Sign out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </div>
       </div>
-
-      {/* Mobile menu */}
-      {mobileOpen && (
-        <div className="md:hidden border-t border-border bg-background px-4 py-2 space-y-1">
-          {tabs.map((tab) => {
-            const active = pathname === tab.href || (tab.href !== "/home" && pathname.startsWith(tab.href));
-            return (
-              <Link
-                key={tab.href}
-                href={tab.href}
-                onClick={() => setMobileOpen(false)}
-                className={cn(
-                  "flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-                  active ? "bg-lime/10 text-lime" : "text-muted-foreground hover:bg-secondary"
-                )}
-              >
-                <tab.icon className="h-4 w-4" />
-                {tab.label}
-              </Link>
-            );
-          })}
-          <Link
-            href="/home/settings"
-            onClick={() => setMobileOpen(false)}
-            className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary"
-          >
-            <Settings className="h-4 w-4" />
-            Settings
-          </Link>
-          <button
-            onClick={signOut}
-            className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary"
-          >
-            <LogOut className="h-4 w-4" />
-            Sign out
-          </button>
-        </div>
-      )}
-    </nav>
-    <div className="border-t border-border">
-      <CreateNav active={pathname === "/home" ? activeKind : null} />
-    </div>
     </header>
   );
 }

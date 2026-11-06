@@ -1,6 +1,6 @@
 # Katalog agentů podle Agency Agents
 
-Zadání: přenést do Codeforge to, co ukazuje [reel od notvokzzy](https://www.instagram.com/p/DfZNVUDuAod/).
+Zadání: přenést do AgentWe to, co ukazuje [reel od notvokzzy](https://www.instagram.com/p/DfZNVUDuAod/).
 Stav: **katalog je na webu a napojený na projekty i plugin.** Specialisté se načítají za běhu přes MCP, viz `docs/MCP.md`. Ověření na skutečném projektu popisuje `docs/TESTING.md`.
 
 ## Co už funguje
@@ -59,7 +59,7 @@ Text příspěvku dodává: nainstaluješ všechno jedním příkazem, nebo jen 
 
 Skript má i režim `--dry-run` a varuje, když vybraných agentů je víc, než daný nástroj načte. Proto je výběr týmů důležitý.
 
-## Co přidáme do Codeforge
+## Co přidáme do AgentWe
 
 1. **Katalog agentů na stránce Agents a na landing page.** Oddělení s ikonou a barvou, vyhledávání a detail agenta. Nahradí současnou pevnou osmičku specialistů.
 2. **Výběr týmů při vytváření projektu.** Přepínače oddělení jako na konci reelu. Výchozí výběr podle typu z navigace Create:
